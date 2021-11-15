@@ -18,31 +18,22 @@ class Game{
         //en mi caso he puesto 10 posiciones
         // Ejemplo [0,1,2,3,0,1,2,3,0,1]
         this.array(MAX_LEVEL)
-        
         //Hay que añadir a estas funciones el bind(this) lo que hace es que el this se refiera al juego y no al boton
-        this.chooseColor = this.chooseColor.bind(this) //Sin esto no funciona bien, ya que al elegir el color se consideraba el boton y no el juego
-        this.nextLevel = this.nextLevel.bind(this) //Este pasaba lo mismo pero con nivel
+        this.chooseColor = this.chooseColor.bind(this)
+        this.nextLevel = this.nextLevel.bind(this)
         //Aqui hacemos que el siguiente nivel tenga un cierto retraso 
-        setTimeout(this.nextLevel, 700)  //Aqui habia un error ya que sin el retraso de 700 el siguiente nivel pasa demasiado rapido al iniciar
+        setTimeout(this.nextLevel, 700) 
     }
 
     //inicializamos valores tanto score, como level
     initialize() {
         
         //Inicializamos la puntuación (Score) a 0 y el nivel (level) a 1, aunque por defecto ya esta inicializado en el php
-        
-        //Aqui teniamos el problema que desde el php viniera con otros valores que no son 0 y 1, con el test se ha comprobado que van bien ya
-        if(document.getElementById('score') != 0 || document.getElementById('currentLevel') != 1){this.score = 0;this.level = 1} 
-       
+        if(document.getElementById('score') != 0 || document.getElementById('currentLevel') != 1){this.score = 0;this.level = 1}
         this.colors = {Verde,Rojo,Amarillo,Azul};
         //para inicializar debe estar score a 0, level a 1 y entonces le damos al boton y empieza
-        
         if(this.score == 0 && this.level == 1){this.Boton()}
         else{this.initialize}
-        //Sin este if podria ser que se iniciase la partida con los valores por defecto del php 
-        //sin comprobar que los valores de score y level fuesen correctos
-        this.Boton()
-        
         
         return [this.score, this.level]
     }
@@ -50,10 +41,6 @@ class Game{
     //Creamos un array random de LN posiciones (NivelMaximo) que contiene numeros del 0-3 uno para cada color
     array(LN) {
         //Estas condiciones son para el test mas que nada, para que compruebe que no se inserte un nivel Maximo = 0 o negativo, y que por arriba el maximo sea 10
-        
-        //Estas comparaciones comprueban que no le llegue un numero alto o imposible, como negativo o incluso que haga un array de 0
-        //Y en caso que lleguen lo conviertan en 1 o 10 (segun si el fallo es por arriba o por abajo)
-        
         var ambas = false
             var primeraLN = false
             var segundaMS = false
@@ -67,11 +54,8 @@ class Game{
             //Creamos array de LN elementos, con fill ponemos los LN elementos a 0, 
             //y con los mathrandom hacemos que los valores sean entre 0 y 4 (sin llegar a ser 4) 
             //y con el floor hacemos que sean enteros
+            this.sequence = new Array(LN).fill(0).map(n => Math.floor(Math.random() * 4)) 
             
-            //Aqui sin el mathfloor no habia pensado que los valores eran con decimales, 
-            //por lo tanto no cuadraban al transformar de numeros a colores
-            //this.sequence = new Array(LN).fill(0).map(n => Math.floor(Math.random() * 4)) 
-            this.sequence = new Array(LN).fill(0).map(n => Math.random() * 4)
             //Este return es para los test
             return [this.sequence, ambas, primeraLN, segundaMS] 
     }
@@ -80,17 +64,12 @@ class Game{
     chooseColor(ev) {
         
         //Aqui volvemos a comprobar que el max_level no sea mayor a 10 ni menor a 1
-        
-        //Aqui volvi a comprobar que por algun caso Max_Level estuviera en mas de 10 o menos de 1, ya que de ser asi
-        //al utilizarlo mas abajo para ver cuando acaba la partida quizas no acabase nunca o acabase antes de lo esperado
-        
         if(MAX_LEVEL > 10){
             MAX_LEVEL = 10
         }
         if(MAX_LEVEL == 0 || Math.sign(MAX_LEVEL) == -1){
             MAX_LEVEL = 1
         }
-
         //ev.target en que elemento se realiza el click 
         const numberColor = this.transformColorToNumber(ev.target.dataset.color)
         this.iluminationColor(ev.target.dataset.color)
@@ -112,9 +91,6 @@ class Game{
                 } else {
                 //Si el nivel no es igual al maximo significa que has acertado pero el juego sigue al siguiente nivel
                     setTimeout(this.nextLevel, 1500)
-                    //Esto igual que antes va mal, ya que hay que vigilar con los nextlevel de pasarles un cierto retraso 
-                    //para que no hagan las cosas demasiado rapidas para el usuario o se salte pasos
-                  
                 }
             }
         //Si no aciertas al elegir el color has perdido el juego
@@ -127,8 +103,6 @@ class Game{
         
         //Aqui es donde empieza el usuario en si, el gameboard inicia en 1 y el usuario puede verlo inicia en 0 y 
         //cuando muestre secuencia el gameboard, pasa al 1 el sublevel
-        
-        //Aqui tenia un fallo que se guardaba el sublevel del anterior o me llegaba vacio
         if(this.subLevel != 0){this.subLevel = 0}
         
         //Se ilumina a partir del array los valores que tocan
@@ -148,10 +122,6 @@ class Game{
 
     Boton() {
         //Si es distinto a Null se entra (al comprobar con test, al principio intentaba entrar con null)
-        //Aqui tenia 2 errores, que uno lo vi con el test y otro con la vista
-        //El del test es que al principio llegaba null y no sabia que hacer el test y fallaba
-        // y el visual era que yo solo quitaba el start pero no lo volvia a poner, por lo tanto solo se podia jugar una partida
-        // y si querias jugar otra tenias que recargar la pagina de nuevo
         if(Start != null){
             //si tiene la clase hide la quitamos y sino la añadimos, 
             //es para ocultar el boton al empezar y se añada de nuevo a la pantalla al perder o ganar
@@ -164,8 +134,6 @@ class Game{
 
     transformNumberToColor(number) {
         //Transformamos los numeros del array a colores, para que se iluminen al llamar ilumination
-        //Aqui el error era no controlar que pasaba si te llegaba un numero que no era ni 0,1,2,3 como los decimales que me llegaban
-        //al hacer mal el array
         switch (number) {
             case 0: return 'Verde'
             case 1: return 'Azul'
@@ -177,8 +145,6 @@ class Game{
 
     transformColorToNumber(color) {
         //Transformamos los colores a numeros, para comprobar que al elegir un color (ChooseColor) hemos acertado o fallado
-        //Este no fallaba ya que aprendi del otro conversor y le añadi un default por si le llegaba otro color, o en minusculas o cualquier cosa 
-        //que no fuese la esperada
         switch (color) {
             case 'Verde': return 0
             case 'Azul': return 1
@@ -188,14 +154,12 @@ class Game{
         }
     }
     //Actualizar Score en el php
-    //Estos current No estaban, y viendo que accedia mas de 2 veces a cada uno decidi mejor acortarlo añadiendo estas funciones
     currentScore() {
         document.getElementById('score').innerHTML = this.score; 
     }
     //Actualizar Nivel en el php
     currentLevel(){
         document.getElementById('currentLevel').innerHTML = this.level;
-        
     }
 
 
@@ -205,7 +169,6 @@ class Game{
             //si en vez de utilizar la variable const utilizamos Var hay problemas, ya que se pisa y repite el ultimo color todas las veces
             const color = this.transformNumberToColor(sequence[i]) 
             //el 1000 * i es para que los diferentes colores no salgan por pantalla rapidisimos y a la vez, sino que entre ellos tengan cierto tiempo
-            //Aqui el problema se puede ver arriba, sin el valor 1 segundo (1000) pues los colores salian rapidisimos y era imposible captarlos.
             setTimeout(() => this.iluminationColor(color), 1000 * i) 
         }
     }
@@ -214,8 +177,6 @@ class Game{
         //le pide a ese color su classList (todas las clases que tiene) y le añadimos la clase light (del css) para que "encienda" el boton
         this.colors[color].classList.add('light') 
         //Apagara el color "light" pasados 400 ms
-        //lo mismo que en los otros, pero aqui es interesante porque este si que tiene que actuar un poco rapido, 
-        //es el de apagar el color una vez esta encendido
         setTimeout(() => this.shutDown(color), 400) 
     }
 
@@ -226,8 +187,6 @@ class Game{
     
     add_eliminate_click(add) {
         //Segun si le llamamos pasandole un booleano true o false, activara que se pueda clicar o lo desactivara.
-        //Aqui tenia problemas porque como comento abajo habia que utilizar this.chooseColor.bind.(this)
-        //para que el click considere al juego, no esta puesto porque para evitarnos ponerlo 8 veces aqui se pone arriba en inicializar 1 vez
         if(add == true){
             this.colors.Verde.addEventListener('click', this.chooseColor) //this.chooseColor.bind(this) si no ponemos esto, el this va a ser el boton, y queremos que sea el juego
             this.colors.Azul.addEventListener('click', this.chooseColor)
@@ -250,7 +209,7 @@ class Game{
             'success')
         .then(() => {
             //Y a continuación se inicializa para que puedas jugar otra vez y resetea valores
-            //Aqui el problema era que se inicializaba bien, pero no se reseteaban bien los valores
+            this.add_eliminate_click(false)
             this.initialize()
             this.resetValues()
         })
@@ -263,7 +222,6 @@ class Game{
             'Lo lamentamos ' + document.getElementById('Name').innerHTML + ', perdiste el juego con ' + document.getElementById('score').innerHTML + ' puntos :(', 
             'error')
             .then(() => {
-                //Aqui igual inicializaba bien pero no reseteaba bien
                 this.add_eliminate_click(false)
                 this.resetValues()
                 this.initialize()
@@ -271,7 +229,6 @@ class Game{
     }
 
     resetValues() {
-        //Gracias al test cree esta funcion para que resetease si o si los 3 valores por pantalla.
         //Es la funcion para resetear valores cuando pierdes o ganas, actualizando el php a los valores iniciales
         if(document.getElementById('score') != null){
             document.getElementById('score').innerHTML = '0'
