@@ -1,0 +1,155 @@
+/*General*/
+
+* {
+    margin: 0;
+    padding:0;
+    font-family: 'Arial', serif;
+}
+
+/*Estilo Body, fondo de pantalla aqui añadimos imagen de fondo*/
+body {
+    
+    background-image: url("../../Img/Galleta.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: fixed;
+    width: 105%;
+    height: 127%;
+}
+
+/* Header en general*/
+header {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+/*Header para el titulo SimonDice*/
+.header__container--titulo{
+    color: green;
+    display: flex;
+    font-size: 250%;
+    margin-right: 0%;
+}
+
+/*Header para la info en general*/
+.header__container--info{
+    display: flex;
+}
+
+/*Header para la info de la puntuacion*/
+.header__container--info-score{
+    font-size: 300%;
+    margin-top: 1%;
+    margin-right: 10%;
+}
+
+/*Header para la info del nivel*/
+.header__container--info-level{
+    font-size: 300%;
+    margin-top: 1%;
+    margin-right: 10%;
+}
+
+/*Header para la info del nombre del jugador*/
+.header__container--info-name{
+    font-size: 300%;
+    margin-top: 1%;
+    margin-right: 900px;
+}
+
+/*Gameboard*/
+
+.section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 4%;
+
+}
+/*GameBoard posicion */
+.section__gameboard{
+    height: 100vh;
+    width: 100vh;
+    border-radius: 100%;
+    overflow: hidden;
+    align-items: center;
+    margin: 0%;
+    max-height: 60vh;
+    max-width: 60vh;
+}
+
+/*como poner los colores en el gameboard*/
+.color {
+    width: 25%;
+    height: 100%;
+    display: inline-block;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+/*Color 1 Verde*/
+.Verde {
+    background: #139D00;
+}
+/*Color 1 Ver iluminado*/
+.Verde.light {
+    background: #28660b;
+}
+
+/*Color 2 Rojo*/
+.Rojo {
+    background: #FF1203;
+}
+
+/*Color 2 Rojo iluminado*/
+.Rojo.light {
+    background: #EA28D3;
+}
+
+/*Color 3 Amarillo*/
+.Amarillo {
+    background: #ECFF00;
+}
+
+/*Color 3 Amarillo Iluminado*/
+.Amarillo.light {
+    background: #FFB935;
+}
+
+/*Color 4 Azul*/
+.Azul {
+    background: #0916E6;
+}
+
+/*Color 4 Azul Iluminado*/
+.Azul.light {
+    background: #0EA8E6;
+}
+
+/*Boton Start*/
+.Comenzar {
+    width: 400px;
+    height: 100px;
+    background: #ecf0f1;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    position: absolute;
+    top: calc(50% - 140px);
+    left: calc(50% - 200px);
+}
+
+.hide {
+    display: none;
+}
+
+header {
+    display: flex;
+
+}
